@@ -68,18 +68,22 @@ class App extends Component {
   }
 
   render() {
+    const { deck, message } = this.state
+    const alreadyMatchedCards = Object.values(deck).filter(({matched}) => matched)
+    const matchedCardCount = alreadyMatchedCards.length / 2
     const boardProps = {
-      deck: this.state.deck,
+      deck,
       updateDeck: (cards) => this.updateDeck(cards),
       renderMessage: (string) => this.renderMessage(string)
     }
     const messageProps = {
-      message: this.state.message,
+      matchedCardCount,
+      message,
       initGame: this.initGame,
-      handleShowFoundCards: this.handleShowFoundCards
+      handleShowFoundCards: this.handleShowFoundCards,
     }
     const foundCardProps = {
-      deck: this.state.deck
+      foundCards: alreadyMatchedCards
     }
     return (
       <div className="App">

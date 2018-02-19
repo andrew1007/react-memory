@@ -11,7 +11,6 @@ export default class Board extends Component {
   }
 
   handleCardClick(currentCard) {
-    let newCardState
     const { firstCard } = this.state
     const cards = {}
     if (firstCard) {

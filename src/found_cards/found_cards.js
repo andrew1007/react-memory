@@ -7,9 +7,8 @@ const containerStyle = {
 }
 
 const FoundCards = props => {
-  const { deck } = props
-  const alreadyMatchedCards = Object.values(deck).filter(({matched}) => matched)
-  const cardRender = alreadyMatchedCards.map((card) => {
+  const { foundCards } = props
+  const cardRender = foundCards.map((card) => {
     let {id, suit, value, flipped, icon, position} = card
     //manually set matched state to false so the cards will be visible,
     //based on logic from card.js
