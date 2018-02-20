@@ -8,7 +8,8 @@ import FoundCards from './found_cards/found_cards'
 
 const containerStyle = {
   display: 'flex',
-  flexDirection: 'row'
+  flexDirection: 'row',
+  justifyContent: 'center'
 }
 const boardStyle = {
   display: 'flex',
@@ -28,6 +29,7 @@ class App extends Component {
     super()
     this.state = {
       deck: {}, //Object that holds entire deck during game, made in deck.js
+      matchedPairs: [],
       showFoundCards: false
     }
   }
@@ -39,6 +41,7 @@ class App extends Component {
   initGame = () => {
     this.setState({
       deck: Deck, //Deck is a clean, shuffled deck object, from deck.js
+      matchedPairs: [],
       message: 'Welcome to React Memory'
     })
   }
@@ -47,6 +50,11 @@ class App extends Component {
   //keys in this.state.deck are card positions
   //the cards argument is an object of cards that overwrites the previous ones
   updateDeck(cards) {
+    if (App.isMatchedPair(cards)) {
+      this.setState({
+        matchedPairs: [...this.state.matchedPairs, Object.values(cards)]
+      }, () => console.log(this.state.matchedPairs))
+    }
     this.setState({deck: {...this.state.deck, ...cards}}, () => {
       if (App.winningDeck(this.state.deck)) {
         setTimeout(() => this.renderMessage('You won'), 1000)
@@ -68,23 +76,19 @@ class App extends Component {
   }
 
   render() {
-    const { deck, message } = this.state
-    const alreadyMatchedCards = Object.values(deck).filter(({matched}) => matched)
-    const matchedCardCount = alreadyMatchedCards.length / 2
+    const { deck, message, matchedPairs, showFoundCards } = this.state
+    const matchedCardCount = matchedPairs.length
     const boardProps = {
       deck,
       updateDeck: (cards) => this.updateDeck(cards),
       renderMessage: (string) => this.renderMessage(string)
     }
     const messageProps = {
-      matchedCardCount,
-      message,
+      matchedCardCount, message, showFoundCards,
       initGame: this.initGame,
       handleShowFoundCards: this.handleShowFoundCards,
     }
-    const foundCardProps = {
-      foundCards: alreadyMatchedCards
-    }
+    const foundCardProps = { matchedPairs }
     return (
       <div className="App">
         <header className="App-header">
@@ -95,9 +99,9 @@ class App extends Component {
           <div style={boardStyle}>
             <Message {...messageProps}/>
             <Board {...boardProps}/>
-          </div>
-          <div style={foundCardStyle}>
-            { this.state.showFoundCards ? <FoundCards {...foundCardProps}/> : null}
+            <div style={foundCardStyle}>
+              { this.state.showFoundCards ? <FoundCards {...foundCardProps}/> : null}
+            </div>
           </div>
         </div>
       </div>
@@ -110,6 +114,10 @@ class App extends Component {
     return cards.every(({matched}) => matched)
   }
 
+  static isMatchedPair(cards) {
+    const cardArr = Object.values(cards)
+    return cardArr.every(({matched}) => matched)
+  }
 }
 
 export default App;

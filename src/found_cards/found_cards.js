@@ -1,19 +1,18 @@
 import React from 'react'
-import Card from '../card/card'
+import CardPair from './card_pair'
 
 const containerStyle = {
-  maxWidth: '100px',
-  fontSize: '25px'
+  display: 'flex',
+  flexWrap: 'wrap',
+  maxWidth: '1325px',
+  fontSize: '40px'
 }
 
 const FoundCards = props => {
-  const { foundCards } = props
-  const cardRender = foundCards.map((card) => {
-    let {id, suit, value, flipped, icon, position} = card
-    //manually set matched state to false so the cards will be visible,
-    //based on logic from card.js
-    let cardProps = {id, suit, value, flipped, matched: false, icon, position}
-    return <Card key={id} {...cardProps}/>
+  const { matchedPairs } = props
+  const cardRender = matchedPairs.map(([card1, card2]) => {
+    let cardPairProps = {cards: [card1, card2]}
+    return <CardPair {...cardPairProps}/>
   })
   return (
     <div style={containerStyle}>

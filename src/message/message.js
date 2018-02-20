@@ -33,7 +33,7 @@ const Message = props => {
       </button>
       {props.message}
       <button style={showFoundStyle} onClick={props.handleShowFoundCards}>
-        <div>Show found cards</div>
+        <div>{props.showFoundCards ? 'Hide' : 'Show'} found cards</div>
         <div>Matches Found: {props.matchedCardCount}</div>
       </button>
     </div>
