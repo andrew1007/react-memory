@@ -53,7 +53,7 @@ class App extends Component {
     if (App.isMatchedPair(cards)) {
       this.setState({
         matchedPairs: [...this.state.matchedPairs, Object.values(cards)]
-      }, () => console.log(this.state.matchedPairs))
+      })
     }
     this.setState({deck: {...this.state.deck, ...cards}}, () => {
       if (App.winningDeck(this.state.deck)) {
@@ -100,7 +100,7 @@ class App extends Component {
             <Message {...messageProps}/>
             <Board {...boardProps}/>
             <div style={foundCardStyle}>
-              { this.state.showFoundCards ? <FoundCards {...foundCardProps}/> : null}
+              { showFoundCards ? <FoundCards {...foundCardProps}/> : null}
             </div>
           </div>
         </div>
