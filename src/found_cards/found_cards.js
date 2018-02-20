@@ -12,7 +12,7 @@ const FoundCards = props => {
   const { matchedPairs } = props
   const cardRender = matchedPairs.map(([card1, card2]) => {
     let cardPairProps = {cards: [card1, card2]}
-    return <CardPair {...cardPairProps}/>
+    return <CardPair key={card1.id} {...cardPairProps}/>
   })
   return (
     <div style={containerStyle}>
