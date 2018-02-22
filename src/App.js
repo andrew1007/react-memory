@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Deck from './deck'
+import * as Deck from './deck'
 import Board from './board/board'
 import Message from './message/message'
 import FoundCards from './found_cards/found_cards'
@@ -19,11 +19,6 @@ const foundCardStyle = {
   display: 'flex',
   flexDirection: 'column'
 }
-/*Deck = {
-  [cardPosition]: {
-    id, suit, value, flipped, matched, icon, position
-  }
-*/
 class App extends Component {
   constructor() {
     super()
@@ -33,6 +28,11 @@ class App extends Component {
       showFoundCards: false
     }
   }
+  /*Deck = {
+  [cardPosition]: {
+  id, suit, value, flipped, matched, icon, position
+  }
+  */
 
   componentWillMount() {
     this.initGame()
@@ -40,7 +40,7 @@ class App extends Component {
 
   initGame = () => {
     this.setState({
-      deck: Deck, //Deck is a clean, shuffled deck object, from deck.js
+      deck: Deck.createDeck(), //Deck is a clean, shuffled deck object, from deck.js
       matchedPairs: [],
       message: 'Welcome to React Memory'
     })
@@ -49,20 +49,21 @@ class App extends Component {
   //Receives cards from board.js and updates deck
   //keys in this.state.deck are card positions
   //the cards argument is an object of cards that overwrites the previous ones
-  updateDeck(cards) {
+  updateDeck = (cards) => {
+    const { matchedPairs, deck } = this.state
     if (App.isMatchedPair(cards)) {
       this.setState({
-        matchedPairs: [...this.state.matchedPairs, Object.values(cards)]
+        matchedPairs: [...matchedPairs, Object.values(cards)]
       })
     }
-    this.setState({deck: {...this.state.deck, ...cards}}, () => {
+    this.setState({deck: {...deck, ...cards}}, () => {
       if (App.winningDeck(this.state.deck)) {
         setTimeout(() => this.renderMessage('You won'), 1000)
       }
     })
   }
 
-  renderMessage(string, matched) {
+  renderMessage = (string, matched) => {
     this.setState({message: string})
     if (matched) {
       setTimeout(() => {
@@ -77,16 +78,15 @@ class App extends Component {
 
   render() {
     const { deck, message, matchedPairs, showFoundCards } = this.state
+    const { updateDeck, renderMessage,
+      initGame, handleShowFoundCards } = this
     const matchedCardCount = matchedPairs.length
-    const boardProps = {
-      deck,
-      updateDeck: (cards) => this.updateDeck(cards),
-      renderMessage: (string) => this.renderMessage(string)
-    }
+    //updateDeck and renderMessage are functions
+    const boardProps = { deck, updateDeck, renderMessage }
+    //initGame and handleShowFoundCards are functions
     const messageProps = {
       matchedCardCount, message, showFoundCards,
-      initGame: this.initGame,
-      handleShowFoundCards: this.handleShowFoundCards,
+      initGame, handleShowFoundCards,
     }
     const foundCardProps = { matchedPairs }
     return (
@@ -105,7 +105,7 @@ class App extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   //you win when every card in this.state.deck has matched:true

@@ -67,10 +67,9 @@ export default class Board extends Component {
     const deckArray = Object.values(this.props.deck)
     const {disableAll} = this.state
     const boardRender = deckArray.map((card) => {
-      let {id, suit, value, flipped, matched, icon, position} = card
+      let {id, value, flipped, matched, icon} = card
       let cardProps = {
-        id, suit, value, flipped, matched,
-        icon, disableAll, position,
+        value, flipped, matched, icon, disableAll,
         handleCardClick: () => this.handleCardClick(card)
       }
       return <Card key={id} {...cardProps}/>

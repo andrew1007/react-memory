@@ -18,7 +18,6 @@ const matchedCardStyle = {
 }
 const flippedCardStyle = {
   ...cardStyle,
-  borderRadius: '9px',
   border: '3px solid blue',
 }
 

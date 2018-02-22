@@ -28,37 +28,38 @@ const icon = {
   3: require('./images/spade.png')
 }
 
-let shuffledPositions = [...Array(52)].map((_, idx) => idx)
-for (let i=0; i < shuffledPositions.length; i++) {
-  let randomIdx = Math.floor(Math.random() * (52 - i)) + i
-  let tempVal = shuffledPositions[randomIdx]
-  shuffledPositions[randomIdx] = shuffledPositions[i]
-  shuffledPositions[i] = tempVal
-}
-
-const shuffledDeck = {}
-let posIdx = 0
-let id = 0
-for (let suitKey in suits) {
-  let currSuit = suits[suitKey]
-  let currIcon = icon[suitKey]
-  for (let valueKey in values) {
-    let currVal = values[valueKey]
-    let currPosition = shuffledPositions[posIdx]
-    shuffledDeck[currPosition] = {
-      id,
-      suit: currSuit,
-      value: currVal,
-      flipped: false,
-      matched: false,
-      icon: currIcon,
-      position: currPosition
-    }
-    posIdx += 1
-    id += 1
+const createDeck = () => {
+  let shuffledPositions = [...Array(52)].map((_, idx) => idx)
+  for (let i=0; i < shuffledPositions.length; i++) {
+    let randomIdx = Math.floor(Math.random() * (52 - i)) + i
+    let tempVal = shuffledPositions[randomIdx]
+    shuffledPositions[randomIdx] = shuffledPositions[i]
+    shuffledPositions[i] = tempVal
   }
+
+  const shuffledDeck = {}
+  let posIdx = 0
+  let id = 0
+  for (let suitKey in suits) {
+    let currSuit = suits[suitKey]
+    let currIcon = icon[suitKey]
+    for (let valueKey in values) {
+      let currVal = values[valueKey]
+      let currPosition = shuffledPositions[posIdx]
+      shuffledDeck[currPosition] = {
+        id,
+        suit: currSuit,
+        value: currVal,
+        flipped: false,
+        matched: false,
+        icon: currIcon,
+        position: currPosition
+      }
+      posIdx += 1
+      id += 1
+    }
+  }
+  return shuffledDeck
 }
 
-const Deck = shuffledDeck
-
-export default Deck
+export { createDeck }
