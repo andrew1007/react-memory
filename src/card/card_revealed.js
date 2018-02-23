@@ -4,7 +4,8 @@ const containerStyle = {
   display: 'flex',
   flexDirection: 'row',
   minHeight: '90px',
-  borderRadius: '9px'
+  borderRadius: '9px',
+  position: 'relative'
 }
 
 const iconContainerStyle = {
@@ -13,8 +14,11 @@ const iconContainerStyle = {
 
 const valueStyle = {
   display: 'flex',
-  alignItems: 'flex-end',
-  fontSize: '50px'
+  fontSize: '50px',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'absolute',
+  width: '100%'
 }
 
 const imageStyle = {
@@ -27,15 +31,15 @@ const CardRevealed = props => {
   const {icon, value} = props
   const value2LengthStyle = {
     ...valueStyle,
-    marginLeft: '-15px'
+    marginLeft: '-7px'
   }
   return (
     <div style={containerStyle}>
       <div style={iconContainerStyle}>
         <img style={imageStyle} src={icon} alt=''/>
       </div>
-      <div style={value.length > 1 ? value2LengthStyle : valueStyle}>
-        {value}
+      <div style={valueStyle}>
+        <div style={{marginTop: '30px'}}>{value}</div>
       </div>
     </div>
   )

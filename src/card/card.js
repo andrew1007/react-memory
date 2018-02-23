@@ -7,7 +7,7 @@ const cardStyle = {
   minHeight: '120px',
   maxWidth: '90px',
   minWidth: '100px',
-  margin: '10px',
+  margin: '8px',
   backgroundColor: 'white',
   borderRadius: '9px',
   outline: 'none'

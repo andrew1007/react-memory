@@ -7,7 +7,7 @@ const containerStyle = {
   flexWrap: 'wrap',
   fontSize: '40px',
   height: '80vh',
-  width: '100vw',
+  width: '97vw',
   justifyContent: 'center',
   alignItems: 'center',
   zIndex: 1
