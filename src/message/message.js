@@ -2,9 +2,11 @@ import React from 'react'
 
 const containerStyle = {
   fontSize: '40px',
-  border: '5px solid black',
   borderRadius: '10px',
-  minHeight: '50px'
+  minHeight: '50px',
+  width: '80vw',
+  display: 'flex',
+  justifyContent: 'space-between'
 }
 
 const buttonStyle = {
@@ -13,6 +15,7 @@ const buttonStyle = {
   borderRadius: '10px',
   outline: 'none',
   fontSize: '20px',
+  color: 'white'
 }
 
 const resetStyle = {

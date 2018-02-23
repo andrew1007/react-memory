@@ -11,6 +11,12 @@ const containerStyle = {
   flexDirection: 'row',
   justifyContent: 'center'
 }
+
+let welcomeStyleContainer = {
+  ...containerStyle,
+  alignItems: 'center'
+}
+
 const boardStyle = {
   display: 'flex',
   flexDirection: 'column'
@@ -25,30 +31,47 @@ class App extends Component {
     this.state = {
       deck: {}, //Object that holds entire deck during game, made in deck.js
       matchedPairs: [],
-      showFoundCards: false
+      showFoundCards: false,
+      showWelcome: true
     }
   }
-  /*Deck = {
+  /*Sample card object in Deck = {
   [cardPosition]: {
-  id, suit, value, flipped, matched, icon, position
-  }
-  */
+    id, suit, value, flipped, matched, icon, position
+  }*/
 
   componentWillMount() {
     this.initGame()
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({showWelcome: false})
+    }, 0)
   }
 
   initGame = () => {
     this.setState({
       deck: Deck.createDeck(), //Deck is a clean, shuffled deck object, from deck.js
       matchedPairs: [],
-      message: 'Welcome to React Memory'
+      message: 'React Memory'
     })
+    setTimeout(() => {
+      if (this.state.message === '') {
+        this.setState({message: 'select a card'})
+      }
+    }, 3000)
   }
 
-  //Receives cards from board.js and updates deck
-  //keys in this.state.deck are card positions
-  //the cards argument is an object of cards that overwrites the previous ones
+  /* updateDeck
+  -Receives cards from board.js and updates deck
+  -keys in this.state.deck are card positions
+  -the cards argument is an object of cards that overwrites the previous ones
+  -ex: original this.state.deck -> {10: {value: 'A', flipped:false, matched: true}}
+  cards argument in updateDeck -> {10: {value: 'A', flipped: true, matched: true}}
+  {this.state.deck, ...cards} -> {10 :{value: 'A', flipped: true, matched: true}}
+  flipped is now true, and now the Ace at position 10 is revealed!
+  */
   updateDeck = (cards) => {
     const { matchedPairs, deck } = this.state
     if (App.isMatchedPair(cards)) {
@@ -73,7 +96,9 @@ class App extends Component {
   }
 
   handleShowFoundCards = () => { //toggles FoundCards
-    this.setState({showFoundCards: !this.state.showFoundCards})
+    this.setState({showFoundCards: !this.state.showFoundCards}, () => {
+      this.setState({message: this.state.showFoundCards ? 'Matches' : 'select a card'})
+    })
   }
 
   render() {
@@ -82,27 +107,44 @@ class App extends Component {
       initGame, handleShowFoundCards } = this
     const matchedCardCount = matchedPairs.length
     //updateDeck and renderMessage are functions
-    const boardProps = { deck, updateDeck, renderMessage }
+    const boardProps = { deck, updateDeck, renderMessage, matchedPairs, showFoundCards }
     //initGame and handleShowFoundCards are functions
     const messageProps = {
       matchedCardCount, message, showFoundCards,
       initGame, handleShowFoundCards,
     }
     const foundCardProps = { matchedPairs }
+    welcomeStyleContainer = {
+      ...welcomeStyleContainer,
+      height: this.state.showWelcome ? '90vh' : '0vh'
+    }
+    const welcomeStyle = {
+      paddingBottom: '10vh',
+      fontSize: '4em',
+      height: this.state.showWelcome ? '0vh' : '0vh'
+    }
+    if (!this.state.showWelcome) {
+      welcomeStyle['margin'] = '0vh'
+      welcomeStyle['height'] = '0vh'
+      welcomeStyle['padding'] = '0vh'
+    }
+    // <div style={foundCardStyle}>
+    //   { showFoundCards ? <FoundCards {...foundCardProps}/> : null}
+    // </div>
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">React Memory</h1>
+          <Message {...messageProps}/>
         </header>
-        <div style={containerStyle}>
+        <div style={containerStyle} className={this.state.showWelcome ? 'hide' : 'show'}>
           <div style={boardStyle}>
-            <Message {...messageProps}/>
             <Board {...boardProps}/>
-            <div style={foundCardStyle}>
-              { showFoundCards ? <FoundCards {...foundCardProps}/> : null}
-            </div>
           </div>
+        </div>
+        <div style={welcomeStyleContainer}>
+          <h1 style={welcomeStyle} className={this.state.showWelcome ? 'show' : 'hide'}>
+            Welcome to React Memory
+          </h1>
         </div>
       </div>
     )

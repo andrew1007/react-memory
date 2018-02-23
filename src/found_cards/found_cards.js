@@ -2,10 +2,15 @@ import React from 'react'
 import CardPair from './card_pair'
 
 const containerStyle = {
+  position: 'absolute',
   display: 'flex',
   flexWrap: 'wrap',
-  maxWidth: '1325px',
-  fontSize: '40px'
+  fontSize: '40px',
+  height: '80vh',
+  width: '100vw',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 1
 }
 
 const FoundCards = props => {

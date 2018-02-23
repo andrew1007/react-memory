@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Card from '../card/card'
+import FoundCards from '../found_cards/found_cards'
 
 export default class Board extends Component {
   constructor() {
@@ -38,17 +39,17 @@ export default class Board extends Component {
     this.props.updateDeck(newCardState)
   }
 
+  handleFlip(card) {
+    return Board.updateCardsState(card, {flipped: true})
+  }
+
   //matched + flipped state become true for both cards
   handleMatch(cards) {
+    this.setState({disableAll: true}) //disable every card from being clicked
     const statusChange = {matched: true, flipped: true}
     const newCardState = Board.updateCardsState(cards, statusChange)
     this.props.renderMessage('matched!', true)
-    setTimeout(() => this.props.updateDeck(newCardState), 1000)
-    setTimeout(() => this.props.renderMessage('select a new card'), 1500)
-  }
-
-  handleFlip(card) {
-    return Board.updateCardsState(card, {flipped: true})
+    this.resetTurn(newCardState)
   }
 
   //set flipped state back to false for both cards
@@ -56,16 +57,24 @@ export default class Board extends Component {
     this.setState({disableAll: true}) //disable every card from being clicked
     const newCardState = Board.updateCardsState(cards, {flipped: false})
     this.props.renderMessage('mismatched')
-    setTimeout(() => {
-      this.props.updateDeck(newCardState)
-      this.setState({disableAll: false})
-      this.props.renderMessage('select a new card')
-    }, 1000)
+    this.resetTurn(newCardState)
+  }
+
+  resetTurn(newCardState) {
+    setTimeout(() => this.updateAndEnableCards(newCardState), 1000)
+    setTimeout(() => this.props.renderMessage('select a new card'), 1500)
+  }
+
+  updateAndEnableCards(newCardState) {
+    this.props.updateDeck(newCardState)
+    this.setState({disableAll: false})
   }
 
   render() {
-    const deckArray = Object.values(this.props.deck)
+    const {matchedPairs, deck, showFoundCards} = this.props
+    const deckArray = Object.values(deck)
     const {disableAll} = this.state
+    const foundCardProps = { matchedPairs }
     const boardRender = deckArray.map((card) => {
       let {id, value, flipped, matched, icon} = card
       let cardProps = {
@@ -74,14 +83,18 @@ export default class Board extends Component {
       }
       return <Card key={id} {...cardProps}/>
     })
-    const boardStyle = {
+    const boardContainerStyle = {
       display: 'flex',
       flexWrap: 'wrap',
-      maxWidth: '1325px'
+      justifyContent: 'center',
+      opacity: showFoundCards ? 0.02 : 1
     }
     return (
-      <div style={boardStyle}>
-        {boardRender}
+      <div>
+        {showFoundCards ? <FoundCards {...foundCardProps}/> : null}
+        <div style={boardContainerStyle}>
+          {boardRender}
+        </div>
       </div>
     )
   }

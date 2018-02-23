@@ -12,6 +12,7 @@ const cardStyle = {
   borderRadius: '9px',
   outline: 'none'
 }
+
 const matchedCardStyle = {
   ...cardStyle,
   opacity: 0

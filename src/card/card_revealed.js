@@ -22,14 +22,19 @@ const imageStyle = {
   maxHeight: '35px'
 }
 
+
 const CardRevealed = props => {
   const {icon, value} = props
+  const value2LengthStyle = {
+    ...valueStyle,
+    marginLeft: '-15px'
+  }
   return (
     <div style={containerStyle}>
       <div style={iconContainerStyle}>
         <img style={imageStyle} src={icon} alt=''/>
       </div>
-      <div style={valueStyle}>
+      <div style={value.length > 1 ? value2LengthStyle : valueStyle}>
         {value}
       </div>
     </div>
