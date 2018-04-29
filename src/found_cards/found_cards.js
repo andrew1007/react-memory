@@ -8,9 +8,10 @@ const containerStyle = {
   fontSize: '40px',
   height: '80vh',
   width: '97vw',
+  left: '0px',
   justifyContent: 'center',
   alignItems: 'center',
-  zIndex: 1
+  zIndex: 1,
 }
 
 const FoundCards = props => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 const containerStyle = {
   fontSize: '40px',
@@ -6,7 +6,8 @@ const containerStyle = {
   minHeight: '50px',
   width: '80vw',
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  maxWidth: '1039px'
 }
 
 const buttonStyle = {
@@ -15,7 +16,8 @@ const buttonStyle = {
   borderRadius: '10px',
   outline: 'none',
   fontSize: '20px',
-  color: 'white'
+  color: 'white',
+  minWidth: '150px'
 }
 
 const resetStyle = {
@@ -34,7 +36,9 @@ const Message = props => {
       <button style={resetStyle} onClick={props.initGame}>
         Reset Game
       </button>
-      {props.message}
+      <Fragment>
+        {props.message}
+      </Fragment>
       <button style={showFoundStyle} onClick={props.handleShowFoundCards}>
         <div>{props.showFoundCards ? 'Hide' : 'Show'} found cards</div>
         <div>Matches Found: {props.matchedCardCount}</div>

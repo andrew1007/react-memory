@@ -1,30 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import * as Deck from './deck'
 import Board from './board/board'
 import Message from './message/message'
-import FoundCards from './found_cards/found_cards'
 
-const containerStyle = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center'
-}
-
-let welcomeStyleContainer = {
-  ...containerStyle,
-  alignItems: 'center'
-}
-
-const boardStyle = {
-  display: 'flex',
-  flexDirection: 'column'
-}
-const foundCardStyle = {
-  display: 'flex',
-  flexDirection: 'column'
-}
 class App extends Component {
   constructor() {
     super()
@@ -47,10 +26,11 @@ class App extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({showWelcome: false})
-    }, 0)
+    }, 3000)
   }
 
   initGame = () => {
+    //clear all timeouts
     this.setState({
       deck: Deck.createDeck(), //Deck is a clean, shuffled deck object, from deck.js
       matchedPairs: [],
@@ -65,6 +45,7 @@ class App extends Component {
 
   /* updateDeck
   -Receives cards from board.js and updates deck
+  -cards is 1 card when first card is being flipped, cards is 2 when match checking
   -keys in this.state.deck are card positions
   -the cards argument is an object of cards that overwrites the previous ones
   -ex: original this.state.deck -> {10: {value: 'A', flipped:false, matched: true}}
@@ -96,12 +77,13 @@ class App extends Component {
   }
 
   handleShowFoundCards = () => { //toggles FoundCards
-    this.setState({showFoundCards: !this.state.showFoundCards}, () => {
-      this.setState({message: this.state.showFoundCards ? 'Matches' : 'select a card'})
+    const { showFoundCards } = this.state
+    this.setState({showFoundCards: !showFoundCards}, () => {
+      this.setState({message: showFoundCards ? 'Matches' : 'select a card'})
     })
   }
 
-  render() {
+  get componentProps() {
     const { deck, message, matchedPairs, showFoundCards } = this.state
     const { updateDeck, renderMessage,
       initGame, handleShowFoundCards } = this
@@ -113,38 +95,66 @@ class App extends Component {
       matchedCardCount, message, showFoundCards,
       initGame, handleShowFoundCards,
     }
-    const foundCardProps = { matchedPairs }
-    welcomeStyleContainer = {
-      ...welcomeStyleContainer,
-      height: this.state.showWelcome ? '90vh' : '0vh'
-    }
+    return { boardProps, messageProps }
+  }
+
+  get styles() {
+    const { showWelcome } = this.state
     const welcomeStyle = {
       paddingBottom: '10vh',
       fontSize: '4em',
-      height: this.state.showWelcome ? '0vh' : '0vh'
+      height: showWelcome ? '0vh' : '0vh'
     }
-    if (!this.state.showWelcome) {
-      welcomeStyle['margin'] = '0vh'
-      welcomeStyle['height'] = '0vh'
-      welcomeStyle['padding'] = '0vh'
+    if (!showWelcome) {
+      const zeroHeight = '0vh'
+      welcomeStyle['margin'] = zeroHeight
+      welcomeStyle['height'] = zeroHeight
+      welcomeStyle['padding'] = zeroHeight
     }
-    // <div style={foundCardStyle}>
-    //   { showFoundCards ? <FoundCards {...foundCardProps}/> : null}
-    // </div>
+    const containerStyle = {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center'
+    }
+    
+    let welcomeStyleContainer = {
+      ...containerStyle,
+      alignItems: 'center'
+    }
+    
+    const boardStyle = {
+      display: 'flex',
+      flexDirection: 'column'
+    }
+    return { welcomeStyle, containerStyle, welcomeStyleContainer, boardStyle }
+  }
+
+  get classNames() {
+    const { showWelcome } = this.state
+    const boardContainerClass = showWelcome ? 'hide' : 'show'
+    const welcomeClass = showWelcome ? 'show' : 'hide'
+    return { welcomeClass, boardContainerClass }
+  }
+
+  render() {
+    const { boardProps, messageProps } = this.componentProps
+    const { welcomeStyle, containerStyle, 
+      welcomeStyleContainer, boardStyle } = this.styles
+    const { welcomeClass, boardContainerClass } = this.classNames
     return (
       <div className="App">
         <header className="App-header">
           <Message {...messageProps}/>
         </header>
-        <div style={containerStyle} className={this.state.showWelcome ? 'hide' : 'show'}>
+        <div style={containerStyle} className={boardContainerClass}>
           <div style={boardStyle}>
             <Board {...boardProps}/>
           </div>
         </div>
         <div style={welcomeStyleContainer}>
-          <h1 style={welcomeStyle} className={this.state.showWelcome ? 'show' : 'hide'}>
+          <div style={welcomeStyle} className={welcomeClass}>
             Welcome to React Memory
-          </h1>
+          </div>
         </div>
       </div>
     )

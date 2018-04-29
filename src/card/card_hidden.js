@@ -20,7 +20,7 @@ const imageStyle = {
 const CardHidden = props => {
   return (
     <div style={containerStyle}>
-      <img style={imageStyle} src={logo} />
+      <img style={imageStyle} src={logo} alt={''}/>
     </div>
   )
 }

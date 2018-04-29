@@ -26,8 +26,7 @@ export default class Board extends Component {
         this.handleMismatch(cards)
       }
       this.setState({firstCard: null})
-    }
-    if (!firstCard){
+    } else {
       this.setState({firstCard: cards['card2']})
       this.props.renderMessage('select a second card')
     }
@@ -55,7 +54,8 @@ export default class Board extends Component {
   //set flipped state back to false for both cards
   handleMismatch(cards) {
     this.setState({disableAll: true}) //disable every card from being clicked
-    const newCardState = Board.updateCardsState(cards, {flipped: false})
+    const statusChange = {flipped: false}
+    const newCardState = Board.updateCardsState(cards, statusChange)
     this.props.renderMessage('mismatched')
     this.resetTurn(newCardState)
   }
@@ -70,12 +70,12 @@ export default class Board extends Component {
     this.setState({disableAll: false})
   }
 
-  render() {
-    const {matchedPairs, deck, showFoundCards} = this.props
-    const deckArray = Object.values(deck)
+  get boardRender() {
+    const { deck } = this.props
     const {disableAll} = this.state
-    const foundCardProps = { matchedPairs }
-    const boardRender = deckArray.map((card) => {
+
+    const deckArray = Object.values(deck)
+    return deckArray.map((card) => {
       let {id, value, flipped, matched, icon} = card
       let cardProps = {
         value, flipped, matched, icon, disableAll,
@@ -83,17 +83,31 @@ export default class Board extends Component {
       }
       return <Card key={id} {...cardProps}/>
     })
+  }
+
+  get styles() {
+    const { showFoundCards } = this.props
     const boardContainerStyle = {
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      opacity: showFoundCards ? 0.02 : 1
+      opacity: showFoundCards ? 0.02 : 1,
+      marginLeft: '15px',
+      marginRight: '15px',
+      maxWidth: '1134px'
     }
+    return { boardContainerStyle }
+  }
+
+  render() {
+    const {matchedPairs, showFoundCards} = this.props
+    const foundCardProps = { matchedPairs }
+    const { boardContainerStyle } = this.styles
     return (
       <div>
         {showFoundCards ? <FoundCards {...foundCardProps}/> : null}
         <div style={boardContainerStyle}>
-          {boardRender}
+          {this.boardRender}
         </div>
       </div>
     )

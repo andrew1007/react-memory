@@ -29,10 +29,6 @@ const imageStyle = {
 
 const CardRevealed = props => {
   const {icon, value} = props
-  const value2LengthStyle = {
-    ...valueStyle,
-    marginLeft: '-7px'
-  }
   return (
     <div style={containerStyle}>
       <div style={iconContainerStyle}>

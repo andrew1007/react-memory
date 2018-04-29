@@ -39,7 +39,6 @@ const createDeck = () => {
 
   const shuffledDeck = {}
   let posIdx = 0
-  let id = 0
   for (let suitKey in suits) {
     let currSuit = suits[suitKey]
     let currIcon = icon[suitKey]
@@ -47,7 +46,7 @@ const createDeck = () => {
       let currVal = values[valueKey]
       let currPosition = shuffledPositions[posIdx]
       shuffledDeck[currPosition] = {
-        id,
+        id: Math.random(), //ensure unique id when resetting deck
         suit: currSuit,
         value: currVal,
         flipped: false,
@@ -56,7 +55,6 @@ const createDeck = () => {
         position: currPosition
       }
       posIdx += 1
-      id += 1
     }
   }
   return shuffledDeck
