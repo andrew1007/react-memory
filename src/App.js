@@ -116,12 +116,12 @@ class App extends Component {
       flexDirection: 'row',
       justifyContent: 'center'
     }
-    
+
     let welcomeStyleContainer = {
       ...containerStyle,
       alignItems: 'center'
     }
-    
+
     const boardStyle = {
       display: 'flex',
       flexDirection: 'column'
@@ -138,7 +138,7 @@ class App extends Component {
 
   render() {
     const { boardProps, messageProps } = this.componentProps
-    const { welcomeStyle, containerStyle, 
+    const { welcomeStyle, containerStyle,
       welcomeStyleContainer, boardStyle } = this.styles
     const { welcomeClass, boardContainerClass } = this.classNames
     return (
